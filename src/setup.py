@@ -7,16 +7,13 @@ import traceback
 from src.utils import setup_utils as utils
 import glob
 
-TITLE = 'MMVT Installation'
-BLENDER_WIN_DIR = 'C:\Program Files\Blender Foundation\Blender'
-EMPTY_SUBJECT_URL = 'https://www.dropbox.com/s/7wfi1rtfsknnlwg/empty_subject.blend?dl=1'
+TITLE = 'MMVT Lite Installation'
 
 
 def copy_resources_files(mmvt_root_dir, overwrite=True, only_verbose=False):
     resource_dir = utils.get_resources_fol()
     utils.make_dir(op.join(op.join(mmvt_root_dir, 'color_maps')))
-    files = ['aparc.DKTatlas40_groups.csv', 'atlas.csv', 'sub_cortical_codes.txt', 'FreeSurferColorLUT.txt',
-             'high_level_atlas.csv']
+    files = ['atlas.csv', 'sub_cortical_codes.txt', 'FreeSurferColorLUT.txt']
     cm_files = glob.glob(op.join(resource_dir, 'color_maps', '*.npy'))
     all_files_exist = utils.all([op.isfile(op.join(mmvt_root_dir, file_name)) for file_name in files])
     all_cm_files_exist = utils.all([op.isfile(
@@ -49,18 +46,6 @@ def copy_resources_files(mmvt_root_dir, overwrite=True, only_verbose=False):
                     print('{} is missing, please update your code from github (git pull)'.format(
                         op.join(resource_dir, file_name)))
     return utils.all([op.isfile(op.join(mmvt_root_dir, file_name)) for file_name in files])
-
-
-def download_empty_subject(mmvt_root_dir, empty_subject_url, overwrite=False):
-    import urllib.request
-    empty_subject_fname = op.join(mmvt_root_dir, 'empty_subject.blend')
-    if op.isfile(empty_subject_fname) and not overwrite:
-        print('Empty subject is already exist')
-        return True
-    utils.delete_file(empty_subject_fname)
-    urllib.request.urlretrieve(empty_subject_url, empty_subject_fname)
-    if op.isfile(empty_subject_fname):
-        print('Empty subject was download successfully!')
 
 
 def install_deface():
@@ -99,7 +84,7 @@ def create_links(links_fol_name='links', gui=True, default_folders=False, only_v
         print('making links dir {}'.format(links_fol))
     else:
         utils.make_dir(links_fol)
-    links_names = ['blender', 'mmvt', 'subjects', 'eeg', 'meg', 'fMRI', 'electrodes']
+    links_names = ['subjects', 'eeg', 'meg', 'fMRI', 'electrodes']
     # if not utils.is_windows():
     #     links_names.insert(1, 'subjects')
     if not overwrite:
@@ -121,31 +106,22 @@ def create_links(links_fol_name='links', gui=True, default_folders=False, only_v
         #     if cont.lower() != 'y':
         #         return
 
-    mmvt_message = 'Please select where do you want to put the blend files '
     subjects_message = \
         'Please select where you want to store the FreeSurfer recon-all files neccessary for MMVT.\n' + \
         '(Creating a local folder is preferred, because MMVT is going to save files to this directory) '
-    blender_message = 'Please select the folder containing the Blender App'
     meg_message = 'Please select where you want to put the MEG files (Cancel if you are not going to use MEG data) '
     eeg_message = 'Please select where you want to put the EEG files (Cancel if you are not going to use EEG data) '
     fmri_message = 'Please select where you want to put the fMRI files (Cancel if you are not going to use fMRI data) '
     electrodes_message = 'Please select where you want to put the electrodes files (Cancel if you are not going to use electrodes data) '
 
-    blender_fol = find_blender()
-    if blender_fol != '':
-        utils.create_folder_link(blender_fol, op.join(links_fol, 'blender'), overwrite)
-    else:
-        ask_and_create_link(links_fol, 'blender',  blender_message, gui, overwrite)
     default_message = "Would you like to set default links to the MMVT's folders?\n" + \
         "You can always change that later by running\n" + \
         "python -m src.setup -f create_links"
     create_default_folders = default_folders or mmvt_input(default_message, gui, 4) == 'Yes'
 
-    messages = [mmvt_message, subjects_message, eeg_message, meg_message, fmri_message, electrodes_message]
-    deafault_fol_names = ['mmvt_blend', 'subjects', 'eeg', 'meg', 'fMRI', 'electrodes']
-    # if not utils.is_windows():
-    #     messages.insert(0, subjects_message)
-    create_default_dirs = [False] * 3 + [True] * 2 + [False] * 2
+    messages = [subjects_message, eeg_message, meg_message, fmri_message, electrodes_message]
+    deafault_fol_names = ['subjects', 'eeg', 'meg', 'fMRI', 'electrodes']
+    create_default_dirs = [False] * 5
 
     links = {}
     if not only_verbose:
@@ -191,8 +167,6 @@ def ask_and_create_link(links_fol, link_name, message, gui=True, create_default_
         if choose_folder:
             root_fol = utils.get_parent_fol(links_fol)
             fol = utils.choose_folder_gui(root_fol, message) if gui else input()
-            if link_name == 'blender' and utils.is_osx():
-                fol = op.join(fol, 'blender.app','Contents','MacOS')
             if fol != '':
                 create_real_folder(fol)
                 ret = utils.create_folder_link(fol, op.join(links_fol, link_name), overwrite=overwrite)
@@ -235,7 +209,7 @@ def write_links_into_csv_file(links, links_fol=None, links_file_name='links.csv'
 
 def create_empty_links_csv(links_fol_name='links', links_file_name='links.csv'):
     links_fol = utils.get_links_dir(links_fol_name)
-    links_names = ['mmvt', 'subjects', 'blender', 'eeg', 'meg', 'fMRI', 'electrodes']
+    links_names = ['subjects', 'eeg', 'meg', 'fMRI', 'electrodes']
     links = {link_name: '' for link_name in links_names}
     write_links_into_csv_file(links, links_fol, links_file_name)
 
@@ -258,14 +232,10 @@ def install_reqs(do_upgrade=False, only_verbose=False):
 
 
 def install_reqs_loop(do_upgrade=False, only_verbose=False):
-    # https://blender.stackexchange.com/questions/149944/how-to-write-my-add-on-so-that-when-installed-it-also-installs-dependencies-let/153520#153520
-    # import pip
     try:
         from pip import main as pipmain
     except:
         from pip._internal import main as pipmain
-    # if utils.is_windows() and not utils.is_admin():
-    #     utils.set_admin()
     pipmain(['install', '--upgrade', 'pip'])
     retcode = 0
     reqs_fname = op.join(utils.get_parent_fol(levels=2), 'requirements.txt')
@@ -282,61 +252,6 @@ def install_reqs_loop(do_upgrade=False, only_verbose=False):
     return retcode
 
 
-def find_blender_in_linux(fol, look_for_dirs=True):
-    blender_fol = ''
-    if look_for_dirs:
-        output = utils.get_command_output("find {} -name '*blender*' -type d".format(fol))
-        blender_fols = output.split('\n')
-        blender_fols = [fol for fol in blender_fols if op.isfile(
-            op.join(fol, 'blender.svg')) or 'blender.app' in fol]
-        if len(blender_fols) >= 1:
-            # todo: let the user select which one
-            blender_fol = blender_fols[0]
-    else:
-        output = utils.get_command_output("find {} -name '*blender*'".format(fol))
-        blender_fols = output.split('\n')
-        blender_fols = [fol for fol in blender_fols if utils.is_link(fol) and
-                        op.isfile(op.join(fol, 'blender.svg'))]
-        if len(blender_fols) >= 1:
-            # todo: let the user select which one
-            blender_fol = blender_fols[0]
-    return blender_fol
-
-
-def find_blender():
-    blender_fol = ''
-    if utils.is_windows():
-        blender_win_fol = 'Program Files\Blender Foundation\Blender*'
-        for drive in ['C', 'D']:
-            if len(glob.glob(op.join('{}:\\'.format(drive), blender_win_fol))) > 0:
-                blender_fol = select_file(glob.glob(op.join('{}:\\'.format(drive), blender_win_fol)))
-                break
-    elif utils.is_linux():
-        blender_fol = find_blender_in_linux('../', False)
-        if blender_fol == '':
-            blender_fol = find_blender_in_linux('../../')
-        if blender_fol == '':
-            blender_fol = find_blender_in_linux('~/')
-    elif utils.is_osx():
-        blender_fol = op.join(utils.get_parent_fol(levels=3), 'blender-2.79b-macOS-10.6', 'blender.app', 'Contents', 'MacOS')
-        if not op.isdir(blender_fol):
-            blender_fol = '/Applications/Blender/blender.app/Contents/MacOS'
-        blender_fol = blender_fol if op.isdir(blender_fol) else ''
-        # output = utils.run_script("find ~/ -name 'blender' -type d")
-        # if not isinstance(output, str):
-        #     output = output.decode(sys.getfilesystemencoding(), 'ignore')
-        # blender_fols = output.split('\n')
-        # blender_fols = [fol for fol in blender_fols if 'blender.app' in fol]
-        # if len(blender_fols) == 1:
-        #     blender_fol = op.join(blender_fols[0], 'blender.app', 'Contents', 'MacOS', 'blender')
-    print(blender_fol)
-    return blender_fol
-
-
-def read_blender_link():
-    print('Blender link: {}'.format(utils.get_link_dir(utils.get_links_dir(), 'blender')))
-
-
 def create_fsaverage_link(links_fol_name='links'):
     freesurfer_home = os.environ.get('FREESURFER_HOME', '')
     if freesurfer_home != '':
@@ -348,46 +263,6 @@ def create_fsaverage_link(links_fol_name='links'):
             utils.create_folder_link(fsveareg_fol, fsaverage_link)
 
 
-def get_blender_python_exe(blender_fol, gui=True):
-    bin_template = op.join(blender_fol, '..', 'Resources', '2.??', 'python') if utils.is_osx() else \
-        op.join(blender_fol, '2.??', 'python')
-    blender_bin_folders = sorted(glob.glob(bin_template))
-    if len(blender_bin_folders) == 0:
-        print("Couldn't find Blender's bin folder! ({})".format(bin_template))
-        blender_bin_fol = ''
-        choose_folder = mmvt_input('Please choose the Blender bin folder where python file exists', gui) == 'Ok'
-        if choose_folder:
-            fol = utils.choose_folder_gui(blender_parent_fol, 'Blender bin folder') if gui else input()
-            if fol != '':
-                blender_bin_fol = glob.glob(op.join(fol, '2.??', 'python'))[-1]
-        if blender_bin_fol == '':
-            return '', ''
-    elif len(blender_bin_folders) > 1:
-        blender_bin_fol = select_file(blender_bin_folders)
-    else:
-        blender_bin_fol = blender_bin_folders[-1]
-    python_exe = 'python.exe' if utils.is_windows() else 'python3.5m'
-    return blender_bin_fol, python_exe
-
-
-def select_file(files):
-    if len(files) == 1:
-        return files[0]
-    print('More than one blender exist, please choose a folder:')
-    for ind, fname in enumerate(files):
-        print('{}) {}'.format(ind + 1, fname))
-    input_str = 'Which one do you want to pick (1, 2, ...)? Press 0 to cancel: '
-    file_num = input(input_str)
-    while not is_int(file_num):
-        print('Please enter a valid integer')
-        file_num = input(input_str)
-    if file_num == 0:
-        return ''
-    else:
-        file_num = int(file_num) - 1
-        return files[file_num]
-
-
 def is_int(s):
     try:
         int(s)
@@ -396,111 +271,8 @@ def is_int(s):
         return False
 
 
-def get_pip_update_cmd(package='numpy'):
-    blender_fol = utils.get_link_dir(utils.get_links_dir(), 'blender')
-    blender_bin_fol, python_exe = get_blender_python_exe(blender_fol, False)
-    install_cmd = '{} install --upgrade {}'.format(op.join(blender_bin_fol, 'bin', 'pip'), package)
-    print(install_cmd)
-
-
-def install_blender_reqs(blender_fol='', gui=True):
-    # http://stackoverflow.com/questions/9956741/how-to-install-multiple-python-packages-at-once-using-pip
-    try:
-        if blender_fol == '':
-            blender_fol = utils.get_link_dir(utils.get_links_dir(), 'blender')
-        resource_fol = utils.get_resources_fol()
-        blender_bin_fol, python_exe = get_blender_python_exe(blender_fol, gui)
-        current_dir = os.getcwd()
-        os.chdir(blender_bin_fol)
-        # install blender reqs:
-        # todo: take this list from the reqs file
-        reqs = 'matplotlib zmq pizco scipy mne joblib tqdm nibabel pdfkit decorator Pillow scikit-learn gitpython decorator'
-        pip_cmd = '{} {}'.format(op.join('bin', python_exe), op.join(resource_fol, 'get-pip.py'))
-        if not utils.is_windows():
-            utils.run_script(pip_cmd)
-            # https://github.com/pypa/pip/issues/5226
-            # https://stackoverflow.com/questions/49743961/cannot-upgrade-pip-9-0-1-to-9-0-3-requirement-already-satisfied/49758204#49758204
-            # utils.run_script('curl https://bootstrap.pypa.io/get-pip.py | python3')
-            install_cmd = '{} install --upgrade {} --user'.format(op.join('bin', 'pip'), reqs)
-            utils.run_script(install_cmd)
-        else:
-            # https://stackoverflow.com/questions/130763/request-uac-elevation-from-within-a-python-script
-            install_cmd = '{} install {}'.format(op.join('Scripts', 'pip'), reqs)
-            print(
-                'Sorry, automatically installing external python libs in python will be implemented in the future.\n' +
-                'Meanwhile, you can do the following:\n' +
-                '1) Open a terminal window as administrator: ' +
-                'Right click on the "Command Prompt" shortcut from the start menu and choose "Run as administrator"\n' +
-                '2) Change the directory to "{}".\n'.format(blender_bin_fol) +
-                '3) Run "{}"\n'.format(pip_cmd) +
-                '4) Run "{}"\nGood luck!'.format(install_cmd))
-            # from src.mmvt_addon.scripts import install_blender_reqs
-            # install_blender_reqs.wrap_blender_call(args.only_verbose)
-        os.chdir(current_dir)
-    except:
-        print(traceback.format_exc())
-        print("*** Can't install pizco ***")
-
-
-def create_launcher(): ###fix for mac
-    if utils.is_linux() or utils.is_osx():
-        mmvt_root_path = get_mmvt_root_folder()
-        launcher_fname = op.join(mmvt_root_path, 'launch_mmvt.sh')
-        script_code = '#!/bin/tcsh\n'
-        # freesurfer_bin = utils.run_script('which freesurfer')
-        # freesurfer_home = utils.get_parent_fol(freesurfer_bin, levels=2)
-        freesurfer_home = op.join(mmvt_root_path, 'freesurfer/')
-        if op.isdir(freesurfer_home):
-            script_code += \
-                'setenv FREESURFER_HOME {}\n'.format(freesurfer_home) +\
-                'source $FREESURFER_HOME/SetUpFreeSurfer.csh\n'
-        elif os.environ.get('FREESURFER_HOME'):
-            freesurfer_home = os.environ.get('FREESURFER_HOME')
-            script_code += \
-                'setenv FREESURFER_HOME {}\n'.format(freesurfer_home) + \
-                'source $FREESURFER_HOME/SetUpFreeSurfer.csh\n'
-        else:
-            print('Can\'t find FREESURFER_HOME ({})'.format(freesurfer_home))
-        if utils.is_osx():
-            blender_exe = 'blender-2.79b-macOS-10.6/blender.app/Contents/MacOS/blender'
-        elif utils.is_linux():
-            blender_exe = 'blender-2.79b-linux-glibc219-x86_64/blender'
-        script_code += '{}/{} --enable-new-depsgraph\n'.format(get_mmvt_root_folder(), blender_exe)
-        print('Creating launcher: {}'.format(launcher_fname))
-        with open(launcher_fname, 'w') as f:
-            f.write(script_code)
-        utils.run_script('chmod +x {}'.format(launcher_fname))
-    else:
-        print('Auto launcher for Windows is not yet implemented.')
-
-
-def send_email():
-    try:
-        ip = utils.get_ip_address()
-        utils.send_email('mmvt_setup', ip, 'MultiModalityVisualizationTool@gmail.com')
-    except:
-        pass
-
-
 def main(args):
-    # If python version is < 3.5, use Blender's python
-    if sys.version_info[0] < 3 or sys.version_info[0] == 3 and sys.version_info[1] < 5:
-        blender_fol = find_blender()
-        blender_bin_fol, python_exe = get_blender_python_exe(blender_fol)
-        blender_python_exe = op.join(blender_bin_fol, 'bin', python_exe)
-        if not op.isfile(blender_python_exe):
-            print('You must use python 3.5 or newer, or install first Blender')
-        else:
-            # rerun setup with Blender's python
-            args.blender_fol = blender_fol
-            call_args = utils.create_call_args(args)
-            setup_cmd = '{} -m src.setup {}'.format(blender_python_exe, call_args)
-            utils.run_script(setup_cmd, print_only=False)
-        return
-
     print(args)
-    links_dir = utils.get_links_dir(args.links)
-    mmvt_root_dir = utils.get_link_dir(links_dir, 'mmvt')
 
     # 1) Install dependencies from requirements.txt (created using pipreqs)
     if utils.should_run(args, 'install_reqs'):
@@ -508,8 +280,9 @@ def main(args):
 
     # 2) Create links
     if utils.should_run(args, 'create_links'):
-        links_created = create_links(args.links, args.gui, args.default_folders, args.only_verbose,
-                                     args.links_file_name, args.overwrite_links)
+        links_created = create_links(
+            args.links, args.gui, args.default_folders, args.only_verbose,
+            args.links_file_name, args.overwrite_links)
         if not links_created:
             print('Not all the links were created! Make sure all the links are created before running MMVT.')
 
@@ -519,35 +292,16 @@ def main(args):
 
     # 3) Copy resources files
     if utils.should_run(args, 'copy_resources_files'):
+        mmvt_root_dir = get_mmvt_root_folder()
         resource_file_exist = copy_resources_files(mmvt_root_dir, args.overwrite, args.only_verbose)
         if not resource_file_exist:
             input('Not all the resources files were copied to the MMVT folder ({}).\n'.format(mmvt_root_dir) +
                   'Please copy them manually from the mmvt_code/resources folder.\n' +
                   'Press any key to continue...')
 
-    # 3.5) Download empty subject from Dropbox
-    if utils.should_run(args, 'download_empty_subject'):
-        download_empty_subject(mmvt_root_dir, EMPTY_SUBJECT_URL, args.overwrite)
-
-    # 4) Install the addon in Blender (depends on resources and links)
-    if utils.should_run(args, 'install_addon'):
-        from src.mmvt_addon.scripts import install_addon
-        install_addon.wrap_blender_call(args.only_verbose)
-
-    # 5) Install python packages in Blender
-    if utils.should_run(args, 'install_blender_reqs'):
-        install_blender_reqs(args.blender_fol)
-
-    # 6) Install deface (https://surfer.nmr.mgh.harvard.edu/fswiki/mri_deface)
+    # 4) Install deface (https://surfer.nmr.mgh.harvard.edu/fswiki/mri_deface)
     if utils.should_run(args, 'install_deface'):
         install_deface()
-
-    # 7) Create a launcher to run MMVT
-    if utils.should_run(args, 'create_launcher'):
-        create_launcher()
-
-    if utils.should_run(args, 'send_email'):
-        send_email()
 
     if 'create_links_csv' in args.function:
         create_empty_links_csv()
@@ -555,16 +309,8 @@ def main(args):
     if 'create_csv' in args.function:
         write_links_into_csv_file(get_all_links())
 
-    if 'find_blender' in args.function:
-        find_blender()
-
     if 'get_pip_update_cmd' in args.function:
         get_pip_update_cmd()
-
-    if 'read_blender_link' in args.function:
-        read_blender_link()
-
-    # print('Finish!')
 
 
 def print_help():
@@ -576,15 +322,9 @@ def print_help():
         -d: If True, the script will create the default mmvt folders (default: True)
         -o: If True, the scirpt will overwrite the resources files (default: True)
         -f: Set which function (or functions) you want to run (use commas witout spacing) (default: all):
-            install_reqs, create_links, copy_resources_files, install_addon, install_blender_reqs, create_launcher,
-            create_links_csv, and and create_csv
+            install_reqs, create_links, copy_resources_files, create_links_csv, and and create_csv
     '''
     print(str)
-
-
-def probles():
-    # https://blender.stackexchange.com/questions/96020/libglu-so-1-error-loading-shared-library
-    pass
 
 
 if __name__ == '__main__':
@@ -602,7 +342,6 @@ if __name__ == '__main__':
     parser.add_argument('-d', '--default_folders', help='default options', required=False, default='1', type=au.is_true)
     parser.add_argument('-f', '--function', help='functions to run', required=False, default='all', type=au.str_arr_type)
     parser.add_argument('-o', '--overwrite', help='Overwrite resources', required=False, default='1', type=au.is_true)
-    parser.add_argument('--blender_fol', help='', required=False, default='')
     parser.add_argument('--links_file_name', help='', required=False, default='links.csv')
     parser.add_argument('--overwrite_links', help='', required=False, default=1, type=au.is_true)
     parser.add_argument('--upgrade_reqs_libs', help='', required=False, default=0, type=au.is_true)

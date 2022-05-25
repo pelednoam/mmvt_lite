@@ -2,15 +2,9 @@ numpy
 scipy
 matplotlib
 mne
-moviepy
 nibabel
-tqdm
 Pillow
 pysftp
-winshell
-pymsgbox
-zmq
-pizco
 decorator
 scikit-learn
 scikit-image
