@@ -31,7 +31,7 @@ try:
     from src.utils import utils
     from src.utils import preproc_utils as pu
     SUBJECTS_DIR, MMVT_DIR, FREESURFER_HOME = pu.get_links()
-    from src.mmvt_addon import colors_utils as cu
+    from src.utils import colors_utils as cu
 except:
     print("Sorry, no src libs...")
     utils.print_last_error_line()
