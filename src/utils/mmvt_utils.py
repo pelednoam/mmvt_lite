@@ -136,7 +136,7 @@ try:
     from scripts import scripts_utils as su
     importlib.reload(su)
 except:
-    from src.mmvt_addon.scripts import scripts_utils as su
+    from src.utils import scripts_utils as su
 
 get_link_dir = su.get_link_dir
 get_links_dir = su.get_links_dir

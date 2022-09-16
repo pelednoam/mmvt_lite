@@ -3215,7 +3215,7 @@ def plot_max_stc(subject, stc_name, modality='meg', use_abs=True, do_plot=True, 
         #     mmvt_agent.play.set_current_t(int(event.xdata))
 
     import matplotlib.pyplot as plt
-    from src.mmvt_addon.scripts import scripts_utils as su
+    from src.utils import scripts_utils as su
 
     # mmvt_agent = su.get_mmvt_object(subject)
     # if mmvt_agent is not None:

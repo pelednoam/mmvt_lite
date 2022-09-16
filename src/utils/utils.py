@@ -103,7 +103,7 @@ get_atlas_template = mu.get_atlas_template
 fix_atlas_name = mu.fix_atlas_name
 caller_func=mu.caller_func
 
-from src.mmvt_addon.scripts import scripts_utils as su
+from src.utils import scripts_utils as su
 get_link_dir = su.get_link_dir
 get_real_atlas_name = su.get_real_atlas_name
 select_one_file = su.select_one_file
