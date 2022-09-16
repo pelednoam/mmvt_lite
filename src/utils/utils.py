@@ -2178,12 +2178,15 @@ def file_is_newer(fname1, fname2):
     return time.gmtime(op.getmtime(fname1)) > time.gmtime(op.getmtime(fname2))
 
 
-@decorator
-def ignore_warnings(f, *args, **kw):
-    with warnings.catch_warnings():
-        warnings.simplefilter("ignore")
-        retval = f(*args, **kw)
-    return retval
+try:
+    @decorator
+    def ignore_warnings(f, *args, **kw):
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore")
+            retval = f(*args, **kw)
+        return retval
+except:
+    pass
 
 
 def not_windows(func):
