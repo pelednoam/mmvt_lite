@@ -84,7 +84,7 @@ def create_links(links_fol_name='links', gui=True, default_folders=False, only_v
         print('making links dir {}'.format(links_fol))
     else:
         utils.make_dir(links_fol)
-    links_names = ['subjects', 'eeg', 'meg', 'fMRI', 'electrodes']
+    links_names = ['mmvt', 'subjects', 'eeg', 'meg', 'fMRI', 'electrodes']
     # if not utils.is_windows():
     #     links_names.insert(1, 'subjects')
     if not overwrite:
@@ -120,7 +120,7 @@ def create_links(links_fol_name='links', gui=True, default_folders=False, only_v
     create_default_folders = default_folders or mmvt_input(default_message, gui, 4) == 'Yes'
 
     messages = [subjects_message, eeg_message, meg_message, fmri_message, electrodes_message]
-    deafault_fol_names = ['subjects', 'eeg', 'meg', 'fMRI', 'electrodes']
+    deafault_fol_names = ['mmvt_blend', 'subjects', 'eeg', 'meg', 'fMRI', 'electrodes']
     create_default_dirs = [False] * 5
 
     links = {}
@@ -226,7 +226,8 @@ def create_real_folder(real_fol):
 
 def install_reqs(do_upgrade=False, only_verbose=False):
     try:
-        return utils.run_script('pip3 install --user -r requirements.txt')
+        # return utils.run_script('pip3 install --user -r requirements.txt')
+        return utils.run_script('pip3 install -r requirements.txt')
     except:
         return install_reqs_loop(do_upgrade, only_verbose)
 
