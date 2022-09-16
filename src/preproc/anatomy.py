@@ -20,7 +20,6 @@ try:
 except:
     print('no nibabel!')
 from src.utils import labels_utils as lu
-from src.utils import matlab_utils
 from src.utils import utils
 from src.utils import freesurfer_utils as fu
 from src.utils import args_utils as au
@@ -640,6 +639,7 @@ def _parcelate_cortex_parallel(p):
 
 
 def save_matlab_labels_vertices(subject, atlas):
+    from src.utils import matlab_utils
     for hemi in HEMIS:
         matlab_fname = op.join(SUBJECTS_DIR, subject, 'label', '{}.{}.annot_labels.m'.format(hemi, atlas))
         if op.isfile(matlab_fname):
