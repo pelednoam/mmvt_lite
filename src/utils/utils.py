@@ -39,7 +39,7 @@ try:
 except:
     pass
 
-from src.mmvt_addon import mmvt_utils as mu
+from src.utils import mmvt_utils as mu
 # links to mmvt_utils
 Bag = mu.Bag
 copy_file = mu.copy_file

@@ -19,7 +19,7 @@ except:
 from functools import partial
 import re
 
-from src.mmvt_addon import mmvt_utils as mu
+from src.utils import mmvt_utils as mu
 from src.utils import freesurfer_utils as fu
 from src.utils import args_utils as au
 
