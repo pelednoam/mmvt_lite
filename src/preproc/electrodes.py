@@ -5,7 +5,11 @@ import os
 import shutil
 import scipy.io as sio
 import scipy
-from collections import defaultdict, OrderedDict, Iterable
+from collections import defaultdict, OrderedDict
+try:
+    from collections import Iterable
+except:
+    from collections.abc import Iterable
 from datetime import datetime
 from itertools import product
 import traceback
