@@ -1832,7 +1832,7 @@ def main(subject, remote_subject_dir, org_args, flags):
     if utils.should_run(args, 'create_pial_volume_mask'):
         flags['create_pial_volume_mask'] = create_pial_volume_mask(subject, args.overwrite)
 
-    if utils.should_run(args, 'create_new_subject_blend_file'):
+    if 'create_new_subject_blend_file' in args.function:
         flags['create_new_subject_blend_file'] = create_new_subject_blend_file(
             subject, args.atlas, args.overwrite_blend)
 
