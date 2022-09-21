@@ -1709,7 +1709,7 @@ def set_exe_permissions(fpath):
 def csv_from_excel(xlsx_fname, csv_fname, sheet_name=''):
     import csv
     print('Converting xlsx to csv')
-    xsl_file = list(xlsx_reader(xlsx_fname, sheet_name))
+    xsl_file = xlsx_reader(xlsx_fname, sheet_name)
     with open(csv_fname, 'w') as csv_file:
         wr = csv.writer(csv_file, quoting=csv.QUOTE_ALL)
         for line in xsl_file:
@@ -1725,8 +1725,12 @@ def write_arr_to_csv(arr, csv_fname, delimiter=','):
 
 
 def xlsx_reader(xlsx_fname, sheet_name='', skip_rows=0):
-    import xlrd
-    wb = xlrd.open_workbook(xlsx_fname)
+    try:
+        import xlrd
+        wb = xlrd.open_workbook(xlsx_fname)
+    except:
+        import pandas as pd
+        wb = pd.read_excel(xlsx_fname, engine='openpyxl')
     sheet_num = 0
     if len(wb.sheets()) > 1 and sheet_name == '':
         print('More than one sheet in the xlsx file:')
