@@ -79,7 +79,7 @@ def get_mmvt_addon_dir():
 
 
 def get_links_dir():
-    return op.join(get_parent_fol(levels=4), 'links')
+    return op.join(get_parent_fol(levels=3), 'links')
 
 
 def get_windows_link(shortcut):
