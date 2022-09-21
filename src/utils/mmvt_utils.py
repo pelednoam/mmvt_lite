@@ -43,7 +43,11 @@ import os.path as op
 import re
 import shutil
 import uuid
-from collections import OrderedDict, Iterable
+from collections import OrderedDict
+try:
+    from collections import Iterable
+except:
+    from collections.abc import Iterable
 import time
 import subprocess
 from subprocess import Popen, PIPE, STDOUT
