@@ -1709,9 +1709,10 @@ def set_exe_permissions(fpath):
 def csv_from_excel(xlsx_fname, csv_fname, sheet_name=''):
     import csv
     print('Converting xlsx to csv')
+    xsl_file = xlsx_reader(xlsx_fname, sheet_name)
     with open(csv_fname, 'w') as csv_file:
         wr = csv.writer(csv_file, quoting=csv.QUOTE_ALL)
-        for line in xlsx_reader(xlsx_fname, sheet_name):
+        for line in xsl_file:
             wr.writerow(line)
 
 
