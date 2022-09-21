@@ -25,7 +25,6 @@ import csv
 
 from src.utils import utils
 from src.utils import colors_utils as cu
-from src.utils import matlab_utils as mu
 from src.utils import preproc_utils as pu
 from src.utils import geometry_utils as gu
 from src.utils import labels_utils as lu
@@ -437,6 +436,7 @@ def read_electrodes_data_one_mat(subject, mat_file, conditions, stat, output_fil
         color_map='jet', cm_big='YlOrRd', cm_small='PuBu', flip_cm_big=False, flip_cm_small=True,
         moving_average_win_size=0, downsample=2):
     # load the matlab file
+    from src.utils import matlab_utils as mu
     d = sio.loadmat(mat_file)
     # get the labels names
     if electrodes_names_field in d:
