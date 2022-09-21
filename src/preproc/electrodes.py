@@ -24,7 +24,7 @@ from scipy.spatial.distance import cdist
 import csv
 
 from src.utils import utils
-from src.mmvt_addon import colors_utils as cu
+from src.utils import colors_utils as cu
 from src.utils import matlab_utils as mu
 from src.utils import preproc_utils as pu
 from src.utils import geometry_utils as gu
