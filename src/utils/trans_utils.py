@@ -163,7 +163,7 @@ def get_subject_mri_header(subject, subjects_dir, image_name='T1.mgz'):
     image_fname = op.join(subjects_dir, subject, 'mri', image_name)
     if op.isfile(image_fname):
         d = nib.load(image_fname)# 'orig.mgz'))
-        subject_orig_header = d.get_header()
+        subject_orig_header = d.header
     else:
         print("get_subject_mri_header: Can't find image! ({})".format(image_fname))
         subject_orig_header = None
