@@ -1804,9 +1804,6 @@ def main(subject, remote_subject_dir, org_args, flags):
         # *) Save the hemis curvs for the inflated brain
         flags['save_hemis_curv'] = save_hemis_curv(subject, args.atlas)
 
-    if utils.should_run(args, 'create_high_level_atlas'):
-        flags['create_high_level_atlas'] = create_high_level_atlas(subject, args.high_level_atlas_name)
-
     if utils.should_run(args, 'create_spatial_connectivity'):
         # *) Create the subject's connectivity
         flags['connectivity'] = create_spatial_connectivity(subject)
@@ -1829,12 +1826,16 @@ def main(subject, remote_subject_dir, org_args, flags):
     if utils.should_run(args, 'save_images_data_and_header'):
         flags['save_images_data_and_header'] = save_images_data_and_header(subject)
 
-    if utils.should_run(args, 'create_pial_volume_mask'):
-        flags['create_pial_volume_mask'] = create_pial_volume_mask(subject, args.overwrite)
-
     if 'create_new_subject_blend_file' in args.function:
         flags['create_new_subject_blend_file'] = create_new_subject_blend_file(
             subject, args.atlas, args.overwrite_blend)
+
+    if 'create_high_level_atlas' in args.function:
+        flags['create_high_level_atlas'] = create_high_level_atlas(subject, args.high_level_atlas_name)
+
+    if 'create_pial_volume_mask' in args.function:
+        flags['create_pial_volume_mask'] = create_pial_volume_mask(subject, args.overwrite)
+
 
     if 'cerebellum_segmentation' in args.function:
         flags['save_cerebellum_coloring'] = save_cerebellum_coloring(subject)
