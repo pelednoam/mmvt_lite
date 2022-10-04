@@ -2031,6 +2031,11 @@ def main(subject, remote_subject_dir, args, flags):
     if utils.should_run(args, 'create_volume_mask'):
         flags['create_volume_mask'] = create_volume_mask(subject, args.bipolar, args.overwrite_volume_mask)
 
+    if utils.should_run(args, 'run_ela'):
+        flags['run_ela'] = run_ela(
+            subject, args.atlas, args.bipolar, args.overwrite_ela, args.error_radius, args.elc_length,
+            args.electrodes_type, args.n_jobs)
+
     # if utils.should_run(args, 'transform_electrodes_to_mni'):
     #     flags['transform_electrodes_to_mni'] = transform_electrodes_to_mni(
     #         subject, args)
@@ -2060,11 +2065,6 @@ def main(subject, remote_subject_dir, args, flags):
     if 'electrodes_inside_the_dura' in args.function:
         flags['electrodes_inside_the_dura'] = check_how_many_electrodes_inside_the_dura(
             subject, args.sigma, args.bipolar, args.electrodes_type)
-
-    if 'run_ela' in args.function:
-        flags['run_ela'] = run_ela(
-            subject, args.atlas, args.bipolar, args.overwrite_ela, args.error_radius, args.elc_length,
-            args.electrodes_type, args.n_jobs)
 
     if 'create_labels_around_electrodes' in args.function:
         flags['create_labels_around_electrodes'] = create_labels_around_electrodes(
