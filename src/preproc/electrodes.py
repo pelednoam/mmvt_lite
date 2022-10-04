@@ -1902,7 +1902,7 @@ def create_volume_mask(subject, bipolar=False, overwrite=True):
     if t1_header is None:
         print('Cannot find the subject T1.mgz!')
         return False
-    ras_tkr2vox = np.linalg.inv(t1_header.get_header().get_vox2ras_tkr())
+    ras_tkr2vox = np.linalg.inv(t1_header.header.get_vox2ras_tkr())
     surface_vol = np.zeros(t1_data.shape, dtype=np.uint8)
     surface_voxels = np.rint(utils.apply_trans(ras_tkr2vox, electrodes_pos)).astype(int)
     for vox in surface_voxels:
