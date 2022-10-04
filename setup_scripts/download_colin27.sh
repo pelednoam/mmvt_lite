@@ -8,7 +8,7 @@ if [[ "$OSTYPE" == "darwin"* ]]
 then
 	curl -L https://www.dropbox.com/sh/hjto15nnebrdg27/AABpdynLda9KoRkWaNB0WCDaa?dl=1 -o colin27_dropbox.zip
 else
-	sudo apt install unzip
+	#sudo apt install unzip
   wget https://www.dropbox.com/sh/hjto15nnebrdg27/AABpdynLda9KoRkWaNB0WCDaa?dl=1 -O colin27_dropbox.zip
 fi
 
