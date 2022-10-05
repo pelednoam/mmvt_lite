@@ -224,7 +224,7 @@ def create_real_folder(real_fol):
         print(traceback.format_exc())
 
 
-def install_reqs(do_upgrade=False, only_verbose=False):
+def install_reqs_using_text(do_upgrade=False, only_verbose=False):
     try:
         # return utils.run_script('pip3 install --user -r requirements.txt')
         return utils.run_script('pip install -r requirements.txt')
@@ -234,6 +234,18 @@ def install_reqs(do_upgrade=False, only_verbose=False):
 
 def upgrade_pip():
     return utils.run_script('pip install --upgrade pip')
+
+
+def install_reqs():
+    upgrade_pip()
+    reqs_fname = op.join(utils.get_parent_fol(levels=2), 'requirements.txt')
+    with open(reqs_fname, 'r') as f:
+        for line in f:
+            line_parts = line.split('==')
+            if len(line_parts) == 1:
+                utils.run_script('pip install {}'.format(line))
+            else:
+                utils.run_script('pip install {}=={}'.format(line_parts[0], line_parts[1]))
 
 
 def install_reqs_loop(do_upgrade=False, only_verbose=False):
@@ -281,7 +293,7 @@ def main(args):
 
     # 1) Install dependencies from requirements.txt (created using pipreqs)
     if utils.should_run(args, 'install_reqs'):
-        install_reqs(args.upgrade_reqs_libs, args.only_verbose)
+        install_reqs() #args.upgrade_reqs_libs, args.only_verbose)
 
     # 2) Create links
     if utils.should_run(args, 'create_links'):
