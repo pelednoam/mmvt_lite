@@ -12,6 +12,7 @@ TITLE = 'MMVT Lite Installation'
 
 def copy_resources_files(overwrite=True, only_verbose=False):
     mmvt_root_dir = op.join(get_mmvt_root_folder(), 'mmvt_blend')
+    resource_dir = utils.get_resources_fol()
     utils.make_dir(op.join(op.join(mmvt_root_dir, 'color_maps')))
     files = ['atlas.csv', 'sub_cortical_codes.txt', 'FreeSurferColorLUT.txt']
     cm_files = glob.glob(op.join(resource_dir, 'color_maps', '*.npy'))
