@@ -319,7 +319,8 @@ def main(args):
                   'Press any key to continue...')
 
     # 4) Install deface (https://surfer.nmr.mgh.harvard.edu/fswiki/mri_deface)
-    if utils.should_run(args, 'install_deface'):
+    # if utils.should_run(args, 'install_deface'):
+    if 'install_deface' in args.function:
         install_deface()
 
     if 'create_links_csv' in args.function:
