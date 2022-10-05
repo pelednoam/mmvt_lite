@@ -241,9 +241,11 @@ def install_reqs():
     reqs_fname = op.join(utils.get_parent_fol(levels=2), 'requirements.txt')
     with open(reqs_fname, 'r') as f:
         for line in f:
+            line.strip()
             line_parts = line.split('==')
+            print('reqs line: {}'.format(line_parts))
             if len(line_parts) == 1:
-                utils.run_script('pip install {}'.format(line))
+                utils.run_script('pip install {}'.format(line_parts[0]))
             else:
                 utils.run_script('pip install {}=={}'.format(line_parts[0], line_parts[1]))
 
