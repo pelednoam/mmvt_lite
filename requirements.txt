@@ -8,4 +8,5 @@ scikit-learn
 scikit-image
 tqdm
 nitime
+openpyxl
 pandas

@@ -1732,19 +1732,22 @@ def xlsx_reader(xlsx_fname, sheet_name='', skip_rows=0):
         import pandas as pd
         wb = pd.read_excel(xlsx_fname, engine='openpyxl')
     sheet_num = 0
-    if len(wb.sheets()) > 1 and sheet_name == '':
-        print('More than one sheet in the xlsx file:')
-        for ind, sh in enumerate(wb.sheets()):
-            print('{}) {}'.format(ind + 1, sh.name))
-        sheet_num = input('Which one do you want to load (1, 2, ...)? ')
-        while not is_int(sheet_num):
-            print('Please enter a valid integer')
+    try:
+        if len(wb.sheets()) > 1 and sheet_name == '':
+            print('More than one sheet in the xlsx file:')
+            for ind, sh in enumerate(wb.sheets()):
+                print('{}) {}'.format(ind + 1, sh.name))
             sheet_num = input('Which one do you want to load (1, 2, ...)? ')
-        sheet_num = int(sheet_num) - 1
-    if sheet_name != '':
-        sh = wb.sheet_by_name(sheet_name)
-    else:
-        sh = wb.sheets()[sheet_num]
+            while not is_int(sheet_num):
+                print('Please enter a valid integer')
+                sheet_num = input('Which one do you want to load (1, 2, ...)? ')
+            sheet_num = int(sheet_num) - 1
+        if sheet_name != '':
+            sh = wb.sheet_by_name(sheet_name)
+        else:
+            sh = wb.sheets()[sheet_num]
+    except:
+        pass
     for rownum in range(sh.nrows):
         if rownum >= skip_rows:
             yield sh.row_values(rownum)
