@@ -1725,18 +1725,17 @@ def write_arr_to_csv(arr, csv_fname, delimiter=','):
 
 
 def xlsx_reader(xlsx_fname, sheet_name='', skip_rows=0):
-    def xlsx_reader(xlsx_fname, sheet_name='', skip_rows=0):
-        try:
-            import xlrd
-            wb = xlrd.open_workbook(xlsx_fname)
-        except:
-            import pandas as pd
-            wb = pd.read_excel(xlsx_fname, engine='openpyxl')
-            x = np.array(wb.loc[:, :])
-            for rownum, row in enumerate(x):
-                if rownum >= skip_rows:
-                    yield row.tolist()
-            return
+    try:
+        import xlrd
+        wb = xlrd.open_workbook(xlsx_fname)
+    except:
+        import pandas as pd
+        wb = pd.read_excel(xlsx_fname, engine='openpyxl')
+        x = np.array(wb.loc[:, :])
+        for rownum, row in enumerate(x):
+            if rownum >= skip_rows:
+                yield row.tolist()
+        return
 
     sheet_num = 0
     if len(wb.sheets()) > 1 and sheet_name == '':
