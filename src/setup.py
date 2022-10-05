@@ -121,12 +121,12 @@ def create_links(links_fol_name='links', gui=True, default_folders=False, only_v
 
     messages = [subjects_message, eeg_message, meg_message, fmri_message, electrodes_message]
     deafault_fol_names = ['mmvt_blend', 'subjects', 'eeg', 'meg', 'fMRI', 'electrodes']
-    create_default_dirs = [False] * 5
+    create_default_dirs = [False] * 6
 
     links = {}
     if not only_verbose:
         for link_name, default_fol_name, message, create_default_dir in zip(
-                links_names[1:], deafault_fol_names, messages, create_default_dirs):
+                links_names, deafault_fol_names, messages, create_default_dirs):
             fol = ''
             if not create_default_folders:
                 fol, ret = ask_and_create_link(
