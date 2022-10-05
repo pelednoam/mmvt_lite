@@ -21,7 +21,7 @@ source mmvt_env/bin/activate
 # Run set setup 
 cd mmvt_code
 python -m src.setup
-# Download the templalte brain colin27
-cd ..
-sh mmvt_code/setup_scripts/download_colin27.sh
+# Download the templaltes brain colin27 and fsaverage
+sh ./setup_scripts/download_colin27.sh
+sh ./setup_scripts/download_fsaverage.sh
 ```
