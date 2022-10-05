@@ -227,9 +227,13 @@ def create_real_folder(real_fol):
 def install_reqs(do_upgrade=False, only_verbose=False):
     try:
         # return utils.run_script('pip3 install --user -r requirements.txt')
-        return utils.run_script('pip3 install -r requirements.txt')
+        return utils.run_script('pip install -r requirements.txt')
     except:
         return install_reqs_loop(do_upgrade, only_verbose)
+
+
+def upgrade_pip():
+    return utils.run_script('pip install --upgrade pip')
 
 
 def install_reqs_loop(do_upgrade=False, only_verbose=False):
@@ -312,6 +316,9 @@ def main(args):
 
     if 'get_pip_update_cmd' in args.function:
         get_pip_update_cmd()
+
+    if 'upgrade_pip' in args.function:
+        upgrade_pip()
 
 
 def print_help():
