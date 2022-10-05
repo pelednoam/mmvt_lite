@@ -10,8 +10,8 @@ import glob
 TITLE = 'MMVT Lite Installation'
 
 
-def copy_resources_files(mmvt_root_dir, overwrite=True, only_verbose=False):
-    resource_dir = utils.get_resources_fol()
+def copy_resources_files(overwrite=True, only_verbose=False):
+    mmvt_root_dir = op.join(get_mmvt_root_folder(), 'mmvt_blend')
     utils.make_dir(op.join(op.join(mmvt_root_dir, 'color_maps')))
     files = ['atlas.csv', 'sub_cortical_codes.txt', 'FreeSurferColorLUT.txt']
     cm_files = glob.glob(op.join(resource_dir, 'color_maps', '*.npy'))
@@ -311,8 +311,7 @@ def main(args):
 
     # 3) Copy resources files
     if utils.should_run(args, 'copy_resources_files'):
-        mmvt_root_dir = get_mmvt_root_folder()
-        resource_file_exist = copy_resources_files(mmvt_root_dir, args.overwrite, args.only_verbose)
+        resource_file_exist = copy_resources_files(args.overwrite, args.only_verbose)
         if not resource_file_exist:
             input('Not all the resources files were copied to the MMVT folder ({}).\n'.format(mmvt_root_dir) +
                   'Please copy them manually from the mmvt_code/resources folder.\n' +
