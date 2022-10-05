@@ -106,6 +106,7 @@ def create_links(links_fol_name='links', gui=True, default_folders=False, only_v
         #     if cont.lower() != 'y':
         #         return
 
+    mmvt_message = 'Please select where do you want to put the blend files '
     subjects_message = \
         'Please select where you want to store the FreeSurfer recon-all files neccessary for MMVT.\n' + \
         '(Creating a local folder is preferred, because MMVT is going to save files to this directory) '
@@ -119,7 +120,7 @@ def create_links(links_fol_name='links', gui=True, default_folders=False, only_v
         "python -m src.setup -f create_links"
     create_default_folders = default_folders or mmvt_input(default_message, gui, 4) == 'Yes'
 
-    messages = [subjects_message, eeg_message, meg_message, fmri_message, electrodes_message]
+    messages = [mmvt_message, subjects_message, eeg_message, meg_message, fmri_message, electrodes_message]
     deafault_fol_names = ['mmvt_blend', 'subjects', 'eeg', 'meg', 'fMRI', 'electrodes']
     create_default_dirs = [False] * 6
 
