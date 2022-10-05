@@ -6,17 +6,22 @@ This is a lite version of <a href="https://mmvt.mgh.harvard.edu">MMVT</a> withou
 ```
 mkdir mmvt_lite
 cd mmvt_lite
+# Clone the MMVT lite repo
 git clone -b master https://github.com/pelednoam/mmvt_lite.git
+# Clone the Electrodes Labeling Algorithm repo
 git clone -b master https://github.com/pelednoam/electrodes_rois.git
 mv mmvt_lite mmvt_code
 
+# Create a virtual python enviroment for mmvt
 python -m pip install --user --upgrade pip
 python -m pip install --user virtualenv
 python -m venv mmvt_env
 source mmvt_env/bin/activate
 
+# Run set setup 
 cd mmvt_code
 python -m src.setup
+# Download the templalte brain colin27
 cd ..
 sh mmvt_code/setup_scripts/download_colin27.sh
 ```
