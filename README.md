@@ -1,7 +1,7 @@
 <img src=https://user-images.githubusercontent.com/35853195/42889397-52f9c75e-8a78-11e8-9da8-86ccc3a30a80.png align="right" hight=120 width=120/>
 This is a lite version of <a href="https://mmvt.mgh.harvard.edu">MMVT</a> without the visualization component 
 
-## Installation steps for Linux:  
+## Installation steps:  
 
 ```
 mkdir mmvt_lite
@@ -26,7 +26,7 @@ sh ./setup_scripts/download_colin27.sh
 sh ./setup_scripts/download_fsaverage.sh
 ```
 
-### Citations
+## Citations:
 If you are using MMVT Lite in your paper, please cite the following:
 
 <a href="https://scholar.google.com/scholar?hl=en&as_sdt=0%2C22&q=Multi-modal+neuroimaging+analysis+and+visualization+tool+%28MMVT%29&btnG=">MMVT</a>:<br/>
