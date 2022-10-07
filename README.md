@@ -29,7 +29,7 @@ sh ./setup_scripts/download_fsaverage.sh
 ## Citations:
 If you are using MMVT Lite in your paper, please cite the following:
 
-<a href="https://scholar.google.com/scholar?hl=en&as_sdt=0%2C22&q=Multi-modal+neuroimaging+analysis+and+visualization+tool+%28MMVT%29&btnG=">MMVT</a>:<br/>
+<a href="https://arxiv.org/abs/1912.10079">MMVT</a>:<br/>
 Felsenstein, O., N. Peled, E. Hahn, A. P. Rockhill, L. Folsom, T. Gholipour, K. Macadams et al. "Multi-modal neuroimaging analysis and visualization tool (MMVT)." arXiv preprint arXiv:1912.10079 (2019).
 	
 The <a href="https://scholar.google.com/scholar?hl=en&as_sdt=0%2C22&q=Invasive+electrodes+identification+and+labeling&btnG=">ELA algorithm</a>:<br/>
