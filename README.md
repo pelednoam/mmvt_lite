@@ -1,5 +1,5 @@
 <img src=https://user-images.githubusercontent.com/35853195/42889397-52f9c75e-8a78-11e8-9da8-86ccc3a30a80.png align="right" hight=120 width=120/>
-This is a lite version of <a href="https://github.com/pelednoam/mmvt">MMVT</a> without the visualization component. </br>
+This is a lite version of our multimodal analysis and visualization platform, <a href="https://github.com/pelednoam/mmvt">MMVT</a>, without the visualization component. </br>
 Please check out our <a href="https://arxiv.org/abs/1912.10079">paper</a> and <a href="https://mmvt.mgh.harvard.edu">website</a> for more information.
 
 ## Installation steps:  
