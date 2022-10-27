@@ -315,7 +315,7 @@ def create_vertices_labels_lookup(subject, atlas, save_labels_ids=False, overwri
                 subject, atlas, subjects_dir=SUBJECTS_DIR, surf_name='pial', hemi=hemi)
             labels_names = [l.name for l in labels]
         if check_unknown and len([l for l in labels_names if 'unknown' in l.lower()]) == 0:
-            raise Exception('No unknown label in {}'.format(annot_fname))
+            print('*** Warning!!! No unknown label in {}'.format(annot_fname))
         if verts_dict is None:
             if utils.both_hemi_files_exist(op.join(SUBJECTS_DIR, subject, 'surf', '{hemi}.pial')):
                 # verts, _ = nib.freesurfer.read_geometry(op.join(SUBJECTS_DIR, subject, 'surf', '{}.pial'.format(hemi)))
