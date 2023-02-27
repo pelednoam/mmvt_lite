@@ -18,7 +18,7 @@ mv mmvt_lite mmvt_code
 python -m pip install --user --upgrade pip
 python -m pip install --user virtualenv
 python -m venv mmvt_env
-source mmvt_env/bin/activate
+source mmvt_env/bin/activate # add .csh if you are using csh shell
 
 # Run MMVT setup 
 cd mmvt_code
