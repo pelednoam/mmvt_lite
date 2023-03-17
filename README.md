@@ -9,7 +9,7 @@ Please check out our full <a href="https://github.com/pelednoam/mmvt">repository
 mkdir mmvt_lite
 cd mmvt_lite
 # Clone the MMVT lite repo
-git clone -b master https://github.com/pelednoam/mmvt_lite.git
+git clone -b first-stable-version https://github.com/pelednoam/mmvt_lite.git
 # Clone the Electrodes Labeling Algorithm repo
 git clone -b first-stable-version https://github.com/pelednoam/electrodes_rois.git
 mv mmvt_lite mmvt_code
