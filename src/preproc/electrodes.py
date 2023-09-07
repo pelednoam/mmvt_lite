@@ -312,13 +312,13 @@ def rename_and_convert_electrodes_file(subject, ras_xls_sheet_name=''):
         if op.isfile(subject_elec_fname_csv):
             continue
         utils.rename_files([subject_elec_fname_no_ras_pattern.format(subject=subject, postfix='xlsx'),
-                            subject_elec_fname_no_ras_pattern.format(subject=subject.upper(), postfix='xlsx'),
+                            subject_elec_fname_no_ras_pattern.format(subject=subject, postfix='xlsx'),
                             subject_elec_fname_no_ras_pattern.format(subject=subject, postfix='xls'),
-                            subject_elec_fname_no_ras_pattern.format(subject=subject.upper(), postfix='xls')],
+                            subject_elec_fname_no_ras_pattern.format(subject=subject, postfix='xls')],
                            subject_elec_fname_pattern.format(subject=subject, postfix='xlsx'))
-        utils.rename_files([subject_elec_fname_pattern.format(subject=subject.upper(), postfix='csv')],
+        utils.rename_files([subject_elec_fname_pattern.format(subject=subject, postfix='csv')],
                            subject_elec_fname_csv)
-        utils.rename_files([subject_elec_fname_pattern.format(subject=subject.upper(), postfix='xlsx')],
+        utils.rename_files([subject_elec_fname_pattern.format(subject=subject, postfix='xlsx')],
                            subject_elec_fname_xlsx)
         if op.isfile(subject_elec_fname_xlsx) and \
                         (not op.isfile(subject_elec_fname_csv) or op.getsize(subject_elec_fname_csv) == 0):
@@ -1770,13 +1770,15 @@ def get_ras_file(subject, args):
         utils.copy_file(subjects_elecs_fname, local_fname)
     if args.remote_ras_fol != '' and not op.isfile(local_fname):
         remote_ras_fol = utils.build_remote_subject_dir(args.remote_ras_fol, subject)
-        remote_fnames = glob.glob(op.join(remote_ras_fol, '{}*RAS*.xlsx'.format(subject.upper())))
+        remote_fnames = glob.glob(op.join(remote_ras_fol, '{}*RAS*.xlsx'.format(subject)))
         if len(remote_fnames) == 0:
-            remote_fnames = glob.glob(op.join(remote_ras_fol, '{}*RAS*.csv'.format(subject.upper())))
+            print('Coulnd\'t find the RAS coordaintes file ("{}")!\nTrying to find csv files'.format(
+                op.join(remote_ras_fol, '{}*RAS*.xlsx'.format(subject))))
+            remote_fnames = glob.glob(op.join(remote_ras_fol, '{}*RAS*.csv'.format(subject)))
         if len(remote_fnames) == 0:
-            print('Coulnd\'t find the {} RAS coordaintes file!')
+            print('Coulnd\'t find also the csv RAS coordaintes file!'.format(remote_fnames))
             return False
-        # print('glob.glob({}):'.format(op.join(remote_ras_fol, '{}*RAS*.xlsx'.format(subject.upper()))))
+        # print('glob.glob({}):'.format(op.join(remote_ras_fol, '{}*RAS*.xlsx'.format(subject))))
         # print(remote_fnames)
         remote_fname = utils.select_one_file(remote_fnames)
         # remote_fname = op.join(remote_ras_fol, '{}_RAS.xlsx'.format(subject))

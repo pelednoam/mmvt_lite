@@ -1,4 +1,4 @@
-mne==0.23.4
+mne
 pillow
 matplotlib
 nibabel
@@ -8,5 +8,4 @@ scikit-learn
 scikit-image
 tqdm
 nitime
-openpyxl
 pandas
