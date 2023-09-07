@@ -995,8 +995,98 @@ def build_remote_subject_dir(remote_subject_dir_template, subject):
     #     remote_subject_dir = remote_subject_dir.replace('\\\\', '\\')
     return remote_subject_dir
 
-
 def prepare_subject_folder(necessary_files, subject, remote_subject_dir, local_subjects_dir,
+        sftp=False, sftp_username='', sftp_domain='', sftp_password='',
+        overwrite_files=False, print_traceback=True, sftp_port=22, local_subject_dir='', print_missing_files=True,
+        create_links=False, mmvt_dir=None):
+    if local_subject_dir == '':
+        local_subject_dir = op.join(local_subjects_dir, subject)
+    if mmvt_dir is None:
+        mmvt_dir = get_link_dir(get_links_dir(), 'mmvt')
+    if op.isdir(op.join(mmvt_dir, subject)):
+        save(dict(remote_subject_dir=remote_subject_dir, sftp=sftp, sftp_username=sftp_username,
+                  sftp_domain=sftp_domain, sftp_password=sftp_password, sftp_port=sftp_port),
+             op.join(mmvt_dir, subject, 'remote_subject_info.pkl'))
+    all_files_exists = False if overwrite_files else \
+        check_if_all_necessary_files_exist(subject, necessary_files, local_subject_dir, trace=remote_subject_dir == '')
+    if all_files_exists and not overwrite_files:
+        print('{}: All files exist'.format(subject))
+        return True, ''
+    elif remote_subject_dir == '':
+        print('Not all the necessary files exist, and the remote_subject_dir was not set!')
+        return False, ''
+    if sftp:
+        password = sftp_copy_subject_files(
+            subject, necessary_files, sftp_username, sftp_domain, local_subjects_dir, remote_subject_dir,
+            sftp_password, overwrite_files, print_traceback, sftp_port)
+    else:
+        for fol, files in necessary_files.items():
+            fol = fol.replace(':', op.sep)
+            # if not op.isdir(op.join(local_subject_dir, fol)):
+            #     os.makedirs(op.join(local_subject_dir, fol))
+            make_dir(op.join(local_subject_dir, fol))
+            for file_name in files:
+                try:
+                    file_name = file_name.replace('{subject}', subject)
+                    local_fname = op.join(local_subject_dir, fol, file_name)
+                    remote_fname = op.join(remote_subject_dir, fol, file_name)
+                    for hemi in HEMIS:
+                        if file_name == '{}.pial'.format(hemi) and not op.isfile(remote_fname):
+                            remote_fname = op.join(remote_subject_dir, fol, '{}.pial.T1'.format(hemi))
+                    local_files = glob.glob(local_fname)
+                    # fs53 DKT atlas backward compatibility fix
+                    if 'DKTatlas' in file_name and not op.isfile(remote_fname):
+                        fs53_fname = file_name.replace('DKTatlas', 'DKTatlas40')
+                        fs53_remote_fname = op.join(remote_subject_dir, fol, fs53_fname)
+                        if op.isfile(fs53_remote_fname):
+                            copy_file(fs53_remote_fname, remote_fname)
+                    if len(local_files) == 0 or overwrite_files:
+                        remote_files = glob.glob(remote_fname)
+                        if len(remote_files) > 0:
+                            remote_fname = select_one_file(remote_files, files_desc=file_name)
+                            remote_lower = namebase_with_ext(remote_fname).lower()
+                            if subject in remote_lower and subject not in namebase(remote_fname):
+                                ind = remote_lower.index(subject)
+                                new_file_name = remote_lower[:ind] + subject + remote_lower[len(subject):]
+                                local_fname = op.join(local_subject_dir, fol, new_file_name)
+                            else:
+                                local_fname = op.join(local_subject_dir, fol, namebase_with_ext(remote_fname))
+                                for hemi in HEMIS:
+                                    if namebase(local_fname) == '{}.pial'.format(hemi):
+                                        local_fname = op.join(local_subject_dir, fol, '{}.pial'.format(hemi))
+                            make_dir(op.join(local_subject_dir, fol))
+                            if remote_fname != local_fname:
+                                if not op.isfile(remote_fname) and not op.isfile(local_fname):
+                                    print('Can\'t find {} nor {}!'.format(remote_fname, local_fname))
+                                if overwrite_files and op.isfile(local_fname):
+                                    os.remove(local_fname)
+                                elif op.isfile(local_fname) and op.getsize(remote_fname) != op.getsize(remote_fname):
+                                    print('Local file and remote file have different sizes!')
+                                    os.remove(local_fname)
+                                if not op.isfile(local_fname):
+                                    print('coping {} to {}'.format(remote_fname, local_fname))
+                                    make_dir(get_parent_fol(local_fname))
+                                    if create_links:
+                                        make_link(remote_fname, local_fname)
+                                    else:
+                                        copy_file(remote_fname, local_fname)
+                                if op.isfile(local_fname) and op.getsize(remote_fname) != op.getsize(remote_fname):
+                                    os.remove(local_fname)
+                                    print('Local file and remote file have different sizes!')
+                        else:
+                            if print_missing_files:
+                                print("Remote file can't be found! {}".format(remote_fname))
+                except:
+                    if print_traceback:
+                        print(traceback.format_exc())
+    all_files_exists = check_if_all_necessary_files_exist(subject, necessary_files, local_subject_dir, True)
+    if sftp:
+        return all_files_exists, password
+    else:
+        return all_files_exists, ''
+
+
+def prepare_subject_folder_old(necessary_files, subject, remote_subject_dir, local_subjects_dir,
         sftp=False, sftp_username='', sftp_domain='', sftp_password='',
         overwrite_files=False, print_traceback=True, sftp_port=22, local_subject_dir='', print_missing_files=True,
         create_links=False):
