@@ -1,5 +1,5 @@
 <img src=https://user-images.githubusercontent.com/35853195/42889397-52f9c75e-8a78-11e8-9da8-86ccc3a30a80.png align="right" hight=120 width=120/>
-This is a lite version of our multimodal analysis and visualization platform (MMVT) that implements a small section of MMVT related to labeling invasive electrodes.
+MMVT Lite is a lite version of our multimodal analysis and visualization platform (MMVT) that implements a small section of MMVT related to labeling invasive electrodes.
 Please check out our full <a href="https://github.com/pelednoam/mmvt">repository</a>, <a href="https://arxiv.org/abs/1912.10079">paper</a>, and <a href="https://mmvt.mgh.harvard.edu">website</a> for more information.
 
 ## Installation steps:  
